@@ -8,8 +8,6 @@ import 'package:todoprovider/providers/todo_search.dart';
 import 'package:todoprovider/utils/debounce.dart';
 import '../models/todo_model.dart';
 
-
-
 class TodosPage extends StatefulWidget {
   const TodosPage({Key? key}) : super(key: key);
 
@@ -31,9 +29,10 @@ class _TodosPageState extends State<TodosPage> {
             child: Column(
               children: [
                 TodoHeader(),
-                  SizedBox(height: 20.0),
-                  SearchAndFilterTodo(),
-                 ShowTodos(),
+                CreateTodo(),
+                SizedBox(height: 20.0),
+                SearchAndFilterTodo(),
+                ShowTodos(),
               ],
             ),
           ),
@@ -67,7 +66,36 @@ class TodoHeader extends StatelessWidget {
   }
 }
 
+class CreateTodo extends StatefulWidget {
+  const CreateTodo({Key? key}) : super(key: key);
 
+  @override
+  _CreateTodoState createState() => _CreateTodoState();
+}
+
+class _CreateTodoState extends State<CreateTodo> {
+  final newTodoController = TextEditingController();
+
+  @override
+  void dispose() {
+    newTodoController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: newTodoController,
+      decoration: InputDecoration(labelText: 'What to do?'),
+      onSubmitted: (String? todoDesc) {
+        if (todoDesc != null && todoDesc.trim().isNotEmpty) {
+          context.read<TodoList>().addTodo(todoDesc);
+          newTodoController.clear();
+        }
+      },
+    );
+  }
+}
 
 class SearchAndFilterTodo extends StatelessWidget {
   SearchAndFilterTodo({Key? key}) : super(key: key);
