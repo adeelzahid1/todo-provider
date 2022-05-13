@@ -1,13 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todoprovider/providers/active_todo_count.dart';
+import '../models/todo_model.dart';
 
-class TodoScreen extends StatelessWidget {
-  const TodoScreen({Key? key}) : super(key: key);
+
+
+class TodosPage extends StatefulWidget {
+  const TodosPage({Key? key}) : super(key: key);
+
+  @override
+  _TodosPageState createState() => _TodosPageState();
+}
+
+class _TodosPageState extends State<TodosPage> {
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20.0,
+              vertical: 40.0,
+            ),
+            child: Column(
+              children: [
+                TodoHeader(),
+
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class TodoHeader extends StatelessWidget {
+  const TodoHeader({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar( title: Text('TODO App'),),
-      body: Center(child: Text('Todo App '),),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          'TODO',
+          style: TextStyle(fontSize: 40.0),
+        ),
+        Text(
+          '${context.watch<ActiveTodoCount>().state.activeTodoCount} items left',
+          style: TextStyle(
+            fontSize: 20.0,
+            color: Colors.redAccent,
+          ),
+        ),
+      ],
     );
   }
 }

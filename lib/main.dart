@@ -37,8 +37,7 @@ class MyApp extends StatelessWidget {
             TodoSearch todoSearch,
             TodoList todoList,
             FilteredTodos? filteredTodos,
-          ) =>
-              filteredTodos!..update(todoFilter, todoSearch, todoList),
+          ) => filteredTodos!..update(todoFilter, todoSearch, todoList),
         ),
       ],
       child: MaterialApp(
@@ -47,7 +46,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const TodoScreen(),
+        home: const TodosPage(),
       ),
     );
   }
