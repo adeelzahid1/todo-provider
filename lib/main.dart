@@ -1,4 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todoprovider/pages/todo_page.dart';
+import 'package:todoprovider/providers/active_todo_count.dart';
+import 'package:todoprovider/providers/filtered_todos.dart';
+import 'package:todoprovider/providers/todo_filter.dart';
+import 'package:todoprovider/providers/todo_list.dart';
+import 'package:todoprovider/providers/todo_search.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -7,62 +15,40 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<TodoFilter>(create: (context) => TodoFilter(),),
+        ChangeNotifierProvider<TodoSearch>(create: (context) => TodoSearch(),),
+        ChangeNotifierProvider<TodoList>(create: (context) => TodoList(),),
+        ChangeNotifierProxyProvider<TodoList, ActiveTodoCount>(
+          create: (context) => ActiveTodoCount(
+            initialActiveTodoCount: context.read<TodoList>().state.todos.length,
+          ),
+          update: ( BuildContext context, TodoList todoList, ActiveTodoCount? activeTodoCount,
+          ) => activeTodoCount!..update(todoList), ),
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+        ChangeNotifierProxyProvider3<TodoFilter, TodoSearch, TodoList,FilteredTodos>(
+          create: (context) => FilteredTodos( initialFilteredTodos: context.read<TodoList>().state.todos, ),
+          update: (
+            BuildContext context,
+            TodoFilter todoFilter,
+            TodoSearch todoSearch,
+            TodoList todoList,
+            FilteredTodos? filteredTodos,
+          ) =>
+              filteredTodos!..update(todoFilter, todoSearch, todoList),
         ),
+      ],
+      child: MaterialApp(
+        title: 'TODOS',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const TodoScreen(),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), 
     );
   }
 }
