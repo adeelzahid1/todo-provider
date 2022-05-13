@@ -5,7 +5,7 @@ import '../models/todo_model.dart';
 
 class TodoListState extends Equatable {
   final List<Todo> todos;
-  TodoListState({
+  const TodoListState({
     required this.todos,
   });
 

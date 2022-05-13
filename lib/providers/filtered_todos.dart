@@ -9,12 +9,12 @@ import '../models/todo_model.dart';
 
 class FilteredTodosState extends Equatable {
   final List<Todo> filterdTodos;
-  FilteredTodosState({
+  const FilteredTodosState({
     required this.filterdTodos,
   });
 
   factory FilteredTodosState.initial() {
-    return FilteredTodosState(filterdTodos: []);
+    return const FilteredTodosState(filterdTodos: []);
   }
 
   @override

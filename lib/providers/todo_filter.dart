@@ -5,12 +5,12 @@ import '../models/todo_model.dart';
 
 class TodoFilterState extends Equatable {
   final Filter filter;
-  TodoFilterState({
+  const TodoFilterState({
     required this.filter,
   });
 
   factory TodoFilterState.initial() {
-    return TodoFilterState(filter: Filter.all);
+    return const TodoFilterState(filter: Filter.all);
   }
 
   @override
